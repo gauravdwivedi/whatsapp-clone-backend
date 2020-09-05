@@ -14,11 +14,13 @@ const db = mongoose.connection;
 //middleware
 app.use(express.json());
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Headers", "*");
-    next();
-});
+app.use(cors());
+
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.set("Access-Control-Allow-Headers", "*");
+//     next();
+// });
 
 const pusher = new Pusher({
     appId: '1067346',
@@ -56,7 +58,8 @@ db.once('open', () => {
             pusher.trigger('messages', 'inserted',
                 {
                     name: messageDetails.name,
-                    message: messageDetails.message
+                    message: messageDetails.message,
+                    received:messageDetails.received
                 }
             );
         } else {
